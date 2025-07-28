@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+body {
+  @apply font-sans bg-gray-900 text-gray-100;
+}
+
+/* Custom horizontal scrollbar styles */
+.scrollbar-custom::-webkit-scrollbar {
+  height: 3px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #10b981;
+  /* emerald-500 */
+  border-radius: 9999px;
+}
