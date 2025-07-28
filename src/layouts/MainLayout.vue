@@ -3,11 +3,7 @@
     <!-- Sidebar (always collapsed) -->
     <aside class="w-16 bg-gray-800 text-gray-100 flex flex-col items-center py-4 space-y-4 relative">
       <!-- Logo -->
-      <img
-        src="@/assets/logo.png" 
-        alt="Logo"
-        class="w-10 h-10 rounded-full object-cover"
-      />
+      <img src="@/assets/logo.png" alt="Logo" class="w-10 h-10 rounded-full object-cover" />
 
       <!-- Nav -->
       <nav class="space-y-4 mt-4 relative">

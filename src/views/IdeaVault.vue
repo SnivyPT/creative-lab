@@ -250,128 +250,140 @@
   </div>
 </template>
 
-<script setup>
-  import { ref, computed, onMounted, watch } from 'vue'
-  import { Brain, PlusCircle, X, Trash, Pencil, Pin } from 'lucide-vue-next'
+<script>
+import { ref, computed, onMounted, watch } from 'vue'
+import { Brain, PlusCircle, X, Trash, Pencil, Pin } from 'lucide-vue-next'
 
-  const STORAGE_KEY = 'idea-vault'
-  const ideas = ref([])
-  const showForm = ref(false)
-  const selectedIdea = ref(null)
-  const newIdea = ref({ title: '', description: '', tags: [], pinned: false })
-  const tagInput = ref('')
-  const pinnedScroll = ref(null)
-
-  const pinnedIdeas = computed(() => ideas.value.filter(i => i.pinned))
-  const activeTag = ref(null)
-  const allTags = computed(() => [...new Set(ideas.value.flatMap(i => i.tags || []))])
-  const filteredIdeas = computed(() => {
-    if (!activeTag.value) return ideas.value
-    return ideas.value.filter(i => i.tags && i.tags.includes(activeTag.value))
-  })
-
-  const isEditing = ref(false)
-  const editIndex = ref(null)
-  const editTitle = ref('')
-  const editDescription = ref('')
-  const editTags = ref([])
-  const editTagInput = ref('')
-
-  function loadIdeas() {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      ideas.value = JSON.parse(saved)
+export default {
+  components: {
+    Brain,
+    PlusCircle,
+    X,
+    Trash,
+    Pencil,
+    Pin
+  },
+  data() {
+    return {
+      STORAGE_KEY: 'idea-vault',
+      ideas: [],
+      showForm: false,
+      selectedIdea: null,
+      newIdea: { title: '', description: '', tags: [], pinned: false },
+      tagInput: '',
+      pinnedScroll: null,
+      activeTag: null,
+      isEditing: false,
+      editIndex: null,
+      editTitle: '',
+      editDescription: '',
+      editTags: [],
+      editTagInput: ''
     }
-  }
-
-  function saveIdeas() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(ideas.value))
-  }
-
-  function addIdea() {
-    if (!newIdea.value.title.trim()) return
-    ideas.value.unshift({ ...newIdea.value })
-    newIdea.value = { title: '', description: '', tags: [] }
-    tagInput.value = ''
-    showForm.value = false
-  }
-
-  function openIdea(idea) {
-    selectedIdea.value = idea
-  }
-
-  function truncate(text) {
-    return text.length > 100 ? text.slice(0, 100) + '…' : text
-  }
-
-  function deleteIdea(index) {
-    if (confirm('Are you sure you want to delete this idea?')) {
-      ideas.value.splice(index, 1)
-      selectedIdea.value = null
+  },
+  computed: {
+    pinnedIdeas() {
+      return this.ideas.filter(i => i.pinned)
+    },
+    allTags() {
+      return [...new Set(this.ideas.flatMap(i => i.tags || []))]
+    },
+    filteredIdeas() {
+      if (!this.activeTag) return this.ideas
+      return this.ideas.filter(i => i.tags && i.tags.includes(this.activeTag))
     }
-  }
-
-  function addNewTag() {
-    const tag = tagInput.value.trim()
-    if (tag && !newIdea.value.tags.includes(tag)) {
-      newIdea.value.tags.push(tag)
-    }
-    tagInput.value = ''
-  }
-
-  function removeNewTag(index) {
-    newIdea.value.tags.splice(index, 1)
-  }
-
-  function startEditingIdea(idea) {
-    editIndex.value = ideas.value.indexOf(idea)
-    editTitle.value = idea.title
-    editDescription.value = idea.description
-    editTags.value = [...(idea.tags || [])]
-    editTagInput.value = ''
-    isEditing.value = true
-    selectedIdea.value = null
-  }
-
-  function addEditTag() {
-    const tag = editTagInput.value.trim()
-    if (tag && !editTags.value.includes(tag)) {
-      editTags.value.push(tag)
-    }
-    editTagInput.value = ''
-  }
-
-  function removeEditTag(index) {
-    editTags.value.splice(index, 1)
-  }
-
-  function saveEditedIdea() {
-    if (editTitle.value.trim()) {
-      ideas.value[editIndex.value] = {
-        ...ideas.value[editIndex.value],
-        title: editTitle.value.trim(),
-        description: editDescription.value.trim(),
-        tags: [...editTags.value],
+  },
+  methods: {
+    loadIdeas() {
+      const saved = localStorage.getItem(this.STORAGE_KEY)
+      if (saved) {
+        this.ideas = JSON.parse(saved)
       }
-      isEditing.value = false
-      editTitle.value = ''
-      editDescription.value = ''
-      editTags.value = []
-      editTagInput.value = ''
+    },
+    saveIdeas() {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.ideas))
+    },
+    addIdea() {
+      if (!this.newIdea.title.trim()) return
+      this.ideas.unshift({ ...this.newIdea })
+      this.newIdea = { title: '', description: '', tags: [] }
+      this.tagInput = ''
+      this.showForm = false
+    },
+    openIdea(idea) {
+      this.selectedIdea = idea
+    },
+    truncate(text) {
+      return text.length > 100 ? text.slice(0, 100) + '…' : text
+    },
+    deleteIdea(index) {
+      if (confirm('Are you sure you want to delete this idea?')) {
+        this.ideas.splice(index, 1)
+        this.selectedIdea = null
+      }
+    },
+    addNewTag() {
+      const tag = this.tagInput.trim()
+      if (tag && !this.newIdea.tags.includes(tag)) {
+        this.newIdea.tags.push(tag)
+      }
+      this.tagInput = ''
+    },
+    removeNewTag(index) {
+      this.newIdea.tags.splice(index, 1)
+    },
+    startEditingIdea(idea) {
+      this.editIndex = this.ideas.indexOf(idea)
+      this.editTitle = idea.title
+      this.editDescription = idea.description
+      this.editTags = [...(idea.tags || [])]
+      this.editTagInput = ''
+      this.isEditing = true
+      this.selectedIdea = null
+    },
+    addEditTag() {
+      const tag = this.editTagInput.trim()
+      if (tag && !this.editTags.includes(tag)) {
+        this.editTags.push(tag)
+      }
+      this.editTagInput = ''
+    },
+    removeEditTag(index) {
+      this.editTags.splice(index, 1)
+    },
+    saveEditedIdea() {
+      if (this.editTitle.trim()) {
+        this.ideas[this.editIndex] = {
+          ...this.ideas[this.editIndex],
+          title: this.editTitle.trim(),
+          description: this.editDescription.trim(),
+          tags: [...this.editTags],
+        }
+        this.isEditing = false
+        this.editTitle = ''
+        this.editDescription = ''
+        this.editTags = []
+        this.editTagInput = ''
+      }
+    },
+    togglePin(idea) {
+      idea.pinned = !idea.pinned
+      this.saveIdeas()
+    },
+    handleHorizontalScroll(e) {
+      const el = this.$refs.pinnedScroll
+      if (!el) return
+      el.scrollLeft += e.deltaY
     }
+  },
+  watch: {
+    ideas: {
+      handler: 'saveIdeas',
+      deep: true
+    }
+  },
+  mounted() {
+    this.loadIdeas()
   }
-
-  function togglePin(idea) {
-    idea.pinned = !idea.pinned
-    saveIdeas()
-  }
-
-  function handleHorizontalScroll(e) {
-    const el = pinnedScroll.value
-    if (!el) return
-    el.scrollLeft += e.deltaY
-  }
-
-  watch(ideas, saveIdeas, { deep: true })
-  onMounted(loadIdeas)
+}
 </script>
