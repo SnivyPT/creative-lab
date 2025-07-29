@@ -23,6 +23,12 @@
           :icon="BadgePlus"
           to="/tools/challenges"
         />
+        <ToolCard
+          title="Poem a Day"
+          description="Get inspired by a new poem every day."
+          :icon="Feather"
+          to="/tools/poem-of-the-day"
+        />
       </div>
     </section>
   </div>
@@ -31,5 +37,5 @@
 <script setup>
 import TodaysSpark from '../components/TodaysSpark.vue'
 import ToolCard from '../components/ToolCard.vue'
-import { Brain, Dice5, BadgePlus } from 'lucide-vue-next'
+import { Brain, Dice5, BadgePlus, Feather} from 'lucide-vue-next'
 </script>

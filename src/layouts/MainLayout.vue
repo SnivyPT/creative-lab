@@ -59,6 +59,19 @@
             Challenges
           </div>
         </router-link>
+
+        <router-link
+          to="/tools/poem-of-the-day"
+          class="flex items-center justify-center p-2 rounded hover:bg-gray-700 relative group"
+          exact-active-class="bg-gray-700 text-emerald-300"
+        >
+          <Feather class="w-6 h-6" />
+          <div
+            class="absolute left-16 bg-gray-900 text-sm text-white px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none z-50"
+          >
+            Poem a Day
+          </div>
+        </router-link>
       </nav>
     </aside>
 
@@ -81,5 +94,5 @@
 </template>
 
 <script setup>
-import { LayoutDashboard, Brain, Dice5, BadgePlus } from 'lucide-vue-next'
+import { LayoutDashboard, Brain, Dice5, BadgePlus, Feather } from 'lucide-vue-next'
 </script>

@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-body {
-  @apply font-sans bg-gray-900 text-gray-100;
-}
-
 /* Custom horizontal scrollbar styles */
 .scrollbar-custom::-webkit-scrollbar {
   height: 3px;
@@ -17,4 +13,15 @@ body {
   background-color: #10b981;
   /* emerald-500 */
   border-radius: 9999px;
+}
+
+html,
+body {
+  @apply font-sans bg-gray-900 text-gray-100;
+  height: 100%;
+  overflow-y: auto;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #10b981 transparent;
 }
